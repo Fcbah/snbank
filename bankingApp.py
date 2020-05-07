@@ -125,7 +125,14 @@ if "__name__" == "__main__":
             response = input("Enter Your Choice: ")
             if response in possible:
                 if response == '1':
-                    pass
+                    print("To create a new Account, enter the following details: ")
+                    details = ["Account name","Opening Balance","Account Type","Account email"]
+                    response =[]
+                    for info in details:
+                        response.append(input("%s: "%info))
+                    accountNumber = createAccount(response[0],response[1],response[2],response[3])
+                    print("------------------------------")
+                    print("The account number for '%s' is: %s"%(response[0],accountNumber))
                 elif response == '2':
                     accountNumber = input("Enter the account number for the account: ")
                     account = findAccount(accountNumber)
