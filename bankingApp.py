@@ -33,14 +33,15 @@ def findStaff(Username, Password):
 
 def findAccount(accountNumber):
     f = open("db/customer.txt", 'r')
-    accounts = json.loads(f.read())
-    f.close()
-
-    if accounts:
+    raw = f.read()
+    if(raw):
+        accounts = json.loads(raw)
+        f.close()
+        
         for account in accounts:
             if account["Account Number"] == accountNumber:
                 return account
-        return False
+        return False    
     return None
 
 def generateAccountNumber():
@@ -68,12 +69,14 @@ def createAccount(accountName, openingBalance, accountType, accountEmail):
         }
     
     f = open("db/customer.txt", 'r')
-    raw = f.read()
-    accountList = json.loads(raw)
+    raw = f.read()    
+    
+    if raw:
+        accountList = json.loads(raw)
+    else:
+        accountList = []
+    
     f.close()
-
-    if not raw:
-        accountlist = []
 
     accountList.append(account)
     
@@ -104,8 +107,10 @@ def find_current_session():
         staffs = json.loads(f.read())
         f.close()
 
+        username = username["Username"]
+
         for staff in staffs:
-            if(staff['Username'].lower() == username.lower()):
+            if((staff['Username']).lower() == username.lower()):
                 return staff
         
         destroy_session() #If the staff does not exist then the session should be destroyed
@@ -115,7 +120,7 @@ def find_current_session():
         return None
     
 
-if "__name__" == "__main__":
+if __name__ == "__main__":
     while True:
         session = find_current_session()
         if(session):
@@ -131,22 +136,26 @@ if "__name__" == "__main__":
                     for info in details:
                         response.append(input("%s: "%info))
                     accountNumber = createAccount(response[0],response[1],response[2],response[3])
-                    print("------------------------------")
-                    print("The account number for '%s' is: %s"%(response[0],accountNumber))
+                    print("\n------------------------------")
+                    print("The account number for '%s' is: %s\n"%(response[0],accountNumber))
                 elif response == '2':
                     accountNumber = input("Enter the account number for the account: ")
                     account = findAccount(accountNumber)
                     if account:
                         print("\nAccount details for %s"%accountNumber)
-                        print("----------------------- ")
+                        print("---------------------------------------------- ")
                         for key in account:
-                            print("%s \t:%s"%(key,account[key]))
+                            if(key == "Opening Balance"):
+                                print("%s \t:%s"%(key,account[key]))
+                            else:
+                                print("%s \t\t:%s"%(key,account[key]))
+                        print("------------------------------------------------\n")
                     else:
-                        print("Wrong Account Number: Account is not registered with us")
+                        print("\nWrong Account Number: Account is not registered with us\n")
                 else:
                     destroy_session()
             else:
-                print("Invalid input, valid inputs are only --> %s "%", ".join(possible))
+                print("\nInvalid input, valid inputs are only --> %s \n"%", ".join(possible))
 
         else:
             displayLoginMenu()
@@ -159,11 +168,11 @@ if "__name__" == "__main__":
                     password = input("Enter your password: ")
                     staff = findStaff(username,password)
                     if not staff:
-                        print("Invalid Username and/or Password")
+                        print("\nInvalid Username and/or Password, Please Try Again Later\n")
                     else:
                         create_session(username)
-                        print("Welcome %s, you have logged in successfully"%staff["Full Name"])
+                        print("\nWelcome %s, you have logged in successfully\n"%staff["Full Name"])
                 elif response == "2":
                     break            
             else:
-                print("Invalid input, valid inputs are only --> %s "%", ".join(possible))
+                print("\nInvalid input, valid inputs are only --> %s \n"%", ".join(possible))
