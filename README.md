@@ -18,7 +18,7 @@ The features of this app are:
 
 To deploy
 
-1. First you need to have a recent version of python (i.e. python 3.x) installed on your machine. Visit [Python Official Website](www.python.org)
+1. First you need to have a recent version of python (i.e. python 3.x) installed on your machine. Visit [Python Official Website](https://www.python.org)
 
 2. Ensure that your environment variables are properly set
 
